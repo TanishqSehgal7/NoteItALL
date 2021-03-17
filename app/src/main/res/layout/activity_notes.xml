@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotesActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_view"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/NotActivityExit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:layout_marginStart="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/MyColorDark"
+            android:foreground="?attr/selectableItemBackground"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true">
+
+        <ImageButton
+            android:id="@+id/SetAlarm"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_access_alarm_24"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/MyColorDark"
+            android:foreground="?attr/selectableItemBackground"/>
+
+        <ImageButton
+            android:id="@+id/PinNote"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_push_pin_24"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/MyColorDark"
+            android:foreground="?attr/selectableItemBackground"/>
+
+        <ImageButton
+            android:id="@+id/SaveNote"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_done_outline_24"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/MyColorDark"
+            android:foreground="?attr/selectableItemBackground"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/Title_ET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/button_layout"
+        android:layout_marginTop="10dp"
+        android:hint="Title of your note"
+        android:textSize="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_goneMarginTop="20dp"
+        android:maxLines="1"
+        android:lines="1"
+        android:inputType="text"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/Title_ET">
+
+          <EditText
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/add_your_content_here"
+              android:textSize="16sp"
+              android:padding="10dp"
+              android:layout_margin="10dp"
+              android:background="@null"
+              android:importantForAutofill="no"
+              android:inputType="textMultiLine"
+              android:textColor="@color/white"
+              android:minHeight="100dp"/>
+
+    </ScrollView>
+
+</LinearLayout>
