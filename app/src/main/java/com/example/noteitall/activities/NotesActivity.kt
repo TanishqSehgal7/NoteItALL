@@ -1,10 +1,11 @@
-package com.example.noteitall
+package com.example.noteitall.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
+import com.example.noteitall.R
 
 class NotesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

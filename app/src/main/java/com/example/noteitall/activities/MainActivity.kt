@@ -1,10 +1,11 @@
-package com.example.noteitall
+package com.example.noteitall.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import com.example.noteitall.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         val addNote:FloatingActionButton= findViewById(R.id.Fab_AddNote)
         addNote.setOnClickListener {
-            val intent=Intent(this,NotesActivity::class.java)
+            val intent=Intent(this, NotesActivity::class.java)
             startActivity(intent)
         }
     }
