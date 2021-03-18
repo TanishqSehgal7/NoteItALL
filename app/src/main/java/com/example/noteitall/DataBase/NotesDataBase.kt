@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.noteitall.activities.DAO.NoteDao
+import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
 
 @Database(entities = [Note::class], exportSchema = false, version = 1)
@@ -29,4 +29,7 @@ abstract class NotesDataBase: RoomDatabase() {
             return instance
         }
     }
+
+    abstract fun noteDao(): NoteDao
+
 }

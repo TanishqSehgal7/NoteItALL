@@ -3,32 +3,37 @@ package com.example.noteitall.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName="Notes")
-data class Note (
+class Note: Serializable{
 
     @PrimaryKey(autoGenerate = true)
-    val id:Int?,
+    var id:Int?=null
 
     @ColumnInfo(name="Title")
-    val titleOfNote:String,
+    var titleOfNote:String?= null
 
     @ColumnInfo(name = "date_Time")
-    val dateTime:String,
+    var TimeandDate:String?=null
 
     @ColumnInfo(name = "ContentOfNote")
-    val contentOfNote:String,
+    var contentOfNote:String?=null
 
     @ColumnInfo(name = "ImagePath")
-    val imagePath:String,
+    var imagePath:String?=null
 
     @ColumnInfo(name= "Color")
-    val color:String,
+    var color:String?=null
 
-    @ColumnInfo(name = "WebLink")
-    val webLik:String,
+    @ColumnInfo(name = "Link")
+    var link:String?=null
 
-        )
+    @Override
+    override fun toString():String{
+        return "$titleOfNote : $TimeandDate"
+    }
+}
 
 
 
