@@ -38,7 +38,7 @@ class NotesActivity : CoRoutineUtilityClass() {
         setContentView(R.layout.activity_notes)
         val backButton:ImageButton=findViewById(R.id.NotActivityExit)
         backButton.setOnClickListener {
-            finish()
+           finish()
         }
 
         noteTitle=findViewById(R.id.Title_ET)
@@ -50,14 +50,22 @@ class NotesActivity : CoRoutineUtilityClass() {
         dateandtime.text=currentTimeandDate
 
         val SaveNoteButton:ImageButton=findViewById(R.id.SaveNote)
+        val note = Note()
+
         SaveNoteButton.setOnClickListener {
+
             if (noteTitle.text.toString().trim().isEmpty()){
+                noteTitle.requestFocus()
                 Toast.makeText(this,"Please enter the note title",Toast.LENGTH_SHORT).show()
+
             } else if(noteContent.text.toString().trim().isEmpty()) {
+                noteContent.requestFocus()
                 Toast.makeText(this,"Note Content cannot be empty",Toast.LENGTH_SHORT).show()
+
             } else {
+
                 launch {
-                    var note = Note()
+
                     note.titleOfNote = noteTitle.text.toString()
                     note.contentOfNote = noteContent.text.toString()
                     note.TimeandDate = currentTimeandDate
@@ -67,48 +75,17 @@ class NotesActivity : CoRoutineUtilityClass() {
                     note.imagePath=PathOfImage
 
                     applicationContext.let {
-                        NotesDataBase.getInstance(it)?.noteDao()?.insetAllNotes(note)
+
+                        NotesDataBase(it)?.noteDao()?.insetNote(note)
 //                    noteTitle.setText("")
 //                    noteContent.setText("")
+
                     }
                 }
-                Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show()
-            }
 
-            finish()
+                Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show()
+                onBackPressed()
+            }
         }
     }
-
-    private suspend fun SaveNote(){
-
-//        if (noteTitle.text.toString().trim().isEmpty()){
-//            Toast.makeText(this,"Please enter the note title",Toast.LENGTH_SHORT).show()
-//            return
-//        } else if(noteContent.text.toString().trim().isEmpty()) {
-//            Toast.makeText(this,"Note Content cannot be empty",Toast.LENGTH_SHORT).show()
-//            return
-//        } else {
-//
-//            launch {
-//
-//                var note = Note()
-//                note.titleOfNote = noteTitle.text.toString()
-//                note.contentOfNote = noteContent.text.toString()
-//                note.TimeandDate = currentTimeandDate
-//                note.id = IDofTheNote
-//                note.color=colorChosen
-//                note.link=WebUrl
-//                note.imagePath=PathOfImage
-//
-//                applicationContext.let {
-//                    NotesDataBase.getInstance(it)?.noteDao()?.insetAllNotes(note)
-////                    noteTitle.setText("")
-////                    noteContent.setText("")
-//                }
-//            }
-//            Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show()
-//        }
-
-    }
-
 }

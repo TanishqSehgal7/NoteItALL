@@ -9,10 +9,10 @@ interface NoteDao {
     //suspend functions are always called inside a coroutine scope
 
     @Query("SELECT * FROM Notes ORDER BY id DESC")
-    suspend fun getAllNotes(note: Note): List<Note>
+    suspend fun getAllNotes(): List<Note>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insetAllNotes(note: Note)
+    suspend fun insetNote(note: Note)
 
     @Delete
     suspend fun deleteNote(note: Note)

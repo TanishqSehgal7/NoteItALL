@@ -9,27 +9,23 @@ import com.example.noteitall.entities.Note
 
 @Database(entities = [Note::class], exportSchema = false, version = 1)
 abstract class NotesDataBase: RoomDatabase() {
-    abstract val noteDao: NoteDao
-
-    companion object {
-
-        private val INSTANCE:NotesDataBase?=null
-
-        fun getInstance(context: Context) : NotesDataBase? {
-            var instance= INSTANCE
-
-            if (instance!=null){
-                instance= Room.databaseBuilder(context.applicationContext,
-                NotesDataBase::class.java,
-                "NotesDataBase")
-                    .fallbackToDestructiveMigration()
-                    .build()
-                instance= INSTANCE
-            }
-            return instance
-        }
-    }
+//    abstract val noteDao: NoteDao
 
     abstract fun noteDao(): NoteDao
 
+    companion object {
+
+        private var instance:NotesDataBase?=null
+        private val LOCK=Any()
+
+        operator fun invoke(context: Context)= instance?: synchronized(LOCK){
+            instance?.DataBaseBuild(context).also {
+                instance=it
+            }
+        }
+
+    }
+    private fun DataBaseBuild(context: Context) = Room.databaseBuilder(
+        context.applicationContext, NotesDataBase::class.java, "NoteDataBase"
+    ).build()
 }
