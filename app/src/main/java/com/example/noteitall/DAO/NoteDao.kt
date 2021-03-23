@@ -1,5 +1,6 @@
 package com.example.noteitall.DAO
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.noteitall.entities.Note
 
@@ -9,10 +10,16 @@ interface NoteDao {
     //suspend functions are always called inside a coroutine scope
 
     @Query("SELECT * FROM Notes ORDER BY id DESC")
-    suspend fun getAllNotes(): List<Note>
+    fun getAllNotes(): LiveData<List<Note>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insetNewNote(note: Note)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insetNote(note: Note)
+    suspend fun addMoreThanOneNote(vararg note: Note)
+
+//    @Update
+//    suspend fun updateExistingNote(note: Note)
 
     @Delete
     suspend fun deleteNote(note: Note)

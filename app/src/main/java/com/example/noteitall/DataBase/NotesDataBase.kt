@@ -6,26 +6,35 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
+import androidx.room.Room.databaseBuilder
 
 @Database(entities = [Note::class], exportSchema = false, version = 1)
 abstract class NotesDataBase: RoomDatabase() {
 //    abstract val noteDao: NoteDao
 
-    abstract fun noteDao(): NoteDao
+    abstract fun GetNoteDao(): NoteDao
 
     companion object {
 
-        private var instance:NotesDataBase?=null
-        private val LOCK=Any()
+        @Volatile
+        private var INSTANCE: NotesDataBase? = null
 
-        operator fun invoke(context: Context)= instance?: synchronized(LOCK){
-            instance?.DataBaseBuild(context).also {
-                instance=it
+        fun MakeTheDataBase(context: Context) : NotesDataBase {
+
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    NotesDataBase::class.java,
+                    "Notes"
+                ).build()
+                INSTANCE = instance
+                // return instance
+                instance
             }
+
         }
 
+
     }
-    private fun DataBaseBuild(context: Context) = Room.databaseBuilder(
-        context.applicationContext, NotesDataBase::class.java, "NoteDataBase"
-    ).build()
+
 }

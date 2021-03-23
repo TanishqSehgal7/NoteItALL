@@ -1,15 +1,20 @@
 package com.example.noteitall.activities
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
+import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import kotlinx.coroutines.launch
@@ -22,10 +27,10 @@ class NotesActivity : CoRoutineUtilityClass() {
     private lateinit var noteContent:EditText
     private lateinit var dateandtime:TextView
     private lateinit var currentTimeandDate:String
-    private var IDofTheNote=-1
-    var colorChosen= "#FFBB00"
-    private var WebUrl=""
-    private var PathOfImage=""
+    private lateinit var viewModel : NoteViewModelClass
+    lateinit var note:Note
+    private lateinit var noteTitleText:String
+    private lateinit var noteContentText: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +38,14 @@ class NotesActivity : CoRoutineUtilityClass() {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportActionBar?.hide()
         WindowManager.LayoutParams.FLAG_FULLSCREEN
-
-
         setContentView(R.layout.activity_notes)
+
+        viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(NoteViewModelClass::class.java)
+        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer {
+
+        })
+
         val backButton:ImageButton=findViewById(R.id.NotActivityExit)
         backButton.setOnClickListener {
            finish()
@@ -50,41 +60,29 @@ class NotesActivity : CoRoutineUtilityClass() {
         dateandtime.text=currentTimeandDate
 
         val SaveNoteButton:ImageButton=findViewById(R.id.SaveNote)
-        val note = Note()
 
         SaveNoteButton.setOnClickListener {
-
+            val replyIntent=Intent()
             if (noteTitle.text.toString().trim().isEmpty()){
                 noteTitle.requestFocus()
+                noteTitle.error="Title required!"
                 Toast.makeText(this,"Please enter the note title",Toast.LENGTH_SHORT).show()
 
             } else if(noteContent.text.toString().trim().isEmpty()) {
                 noteContent.requestFocus()
+                noteTitle.error="Note body required!"
                 Toast.makeText(this,"Note Content cannot be empty",Toast.LENGTH_SHORT).show()
 
             } else {
-
-                launch {
-
-                    note.titleOfNote = noteTitle.text.toString()
-                    note.contentOfNote = noteContent.text.toString()
-                    note.TimeandDate = currentTimeandDate
-                    note.id = IDofTheNote
-                    note.color=colorChosen
-                    note.link=WebUrl
-                    note.imagePath=PathOfImage
-
-                    applicationContext.let {
-
-                        NotesDataBase(it)?.noteDao()?.insetNote(note)
-//                    noteTitle.setText("")
-//                    noteContent.setText("")
-
-                    }
-                }
-
-                Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show()
+                noteTitleText=noteTitle.text.toString()
+                noteContentText=noteContent.text.toString()
+                viewModel.saveNote(Note(noteTitleText,noteContentText))
+                viewModel.AddMoreThanOneNotes(Note(noteTitleText,noteContentText))
+                replyIntent.putExtra("title",noteTitleText)
+                replyIntent.putExtra("content",noteContentText)
+                setResult(Activity.RESULT_OK,replyIntent)
                 onBackPressed()
+
             }
         }
     }
