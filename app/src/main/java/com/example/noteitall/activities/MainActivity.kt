@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Layout
 import android.view.Window
 import android.view.WindowManager
@@ -16,6 +17,7 @@ import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
 import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.adapters.NotesRvAdapter
+import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
@@ -24,6 +26,8 @@ class MainActivity : CoRoutineUtilityClass() {
 
     lateinit var viewModel : NoteViewModelClass
     lateinit var notesRecyclerView:RecyclerView
+    private val ReqCodeForAddNote=1
+    lateinit var note:Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +55,18 @@ class MainActivity : CoRoutineUtilityClass() {
         val addNote:FloatingActionButton= findViewById(R.id.Fab_AddNote)
         addNote.setOnClickListener {
             val intent=Intent(this, NotesActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent,ReqCodeForAddNote)
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode==ReqCodeForAddNote && resultCode== RESULT_OK){
+            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
+            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
+            note= Note(title, content)
+            viewModel.saveNote(note)
+        }
+    }
+
 }

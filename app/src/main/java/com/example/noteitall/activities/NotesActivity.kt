@@ -40,11 +40,11 @@ class NotesActivity : CoRoutineUtilityClass() {
         WindowManager.LayoutParams.FLAG_FULLSCREEN
         setContentView(R.layout.activity_notes)
 
-        viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
-            .get(NoteViewModelClass::class.java)
-        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer {
-
-        })
+//        viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+//            .get(NoteViewModelClass::class.java)
+//        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer {
+//
+//        })
 
         val backButton:ImageButton=findViewById(R.id.NotActivityExit)
         backButton.setOnClickListener {
@@ -76,14 +76,24 @@ class NotesActivity : CoRoutineUtilityClass() {
             } else {
                 noteTitleText=noteTitle.text.toString()
                 noteContentText=noteContent.text.toString()
+                viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+                    .get(NoteViewModelClass::class.java)
+                viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list->
+
+                })
                 viewModel.saveNote(Note(noteTitleText,noteContentText))
                 viewModel.AddMoreThanOneNotes(Note(noteTitleText,noteContentText))
-                replyIntent.putExtra("title",noteTitleText)
-                replyIntent.putExtra("content",noteContentText)
+                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
+                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
                 setResult(Activity.RESULT_OK,replyIntent)
                 onBackPressed()
-
             }
         }
     }
+
+    companion object {
+        val EXTRA_TITLE:String="com.example.noteitall.activities.EXTRA_TITLE"
+        val EXTRA_CONTENT:String="com.example.noteitall.activities.EXTRA_CONTENT"
+    }
+
 }
