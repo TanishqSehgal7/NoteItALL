@@ -31,6 +31,7 @@ class NotesActivity : CoRoutineUtilityClass() {
     lateinit var note:Note
     private lateinit var noteTitleText:String
     private lateinit var noteContentText: String
+    private var notesList= ArrayList<Note>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

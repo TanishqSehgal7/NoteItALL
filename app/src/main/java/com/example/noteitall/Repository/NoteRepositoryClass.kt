@@ -3,6 +3,7 @@ package com.example.noteitall.Repository
 import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 class NoteRepositoryClass(private val noteDao: NoteDao) {
 

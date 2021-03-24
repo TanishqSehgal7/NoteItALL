@@ -1,26 +1,19 @@
 package com.example.noteitall.activities
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.text.Layout
 import android.view.Window
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
 import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.adapters.NotesRvAdapter
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.launch
 
 class MainActivity : CoRoutineUtilityClass() {
 
@@ -39,13 +32,17 @@ class MainActivity : CoRoutineUtilityClass() {
 
         notesRecyclerView=findViewById(R.id.NotesRV)
         notesRecyclerView.setHasFixedSize(true)
-        notesRecyclerView.layoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+        notesRecyclerView.layoutManager=StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         val adapter=NotesRvAdapter(this)
         notesRecyclerView.adapter=adapter
 
-        viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+        viewModel= ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(
+                application
+            )
+        )
             .get(NoteViewModelClass::class.java)
-        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list->
+        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list ->
             list?.let {
                 adapter.UpdateListAfterAnyChanges(it)
             }
@@ -55,7 +52,7 @@ class MainActivity : CoRoutineUtilityClass() {
         val addNote:FloatingActionButton= findViewById(R.id.Fab_AddNote)
         addNote.setOnClickListener {
             val intent=Intent(this, NotesActivity::class.java)
-            startActivityForResult(intent,ReqCodeForAddNote)
+            startActivityForResult(intent, ReqCodeForAddNote)
         }
     }
 
@@ -67,6 +64,12 @@ class MainActivity : CoRoutineUtilityClass() {
             note= Note(title, content)
             viewModel.saveNote(note)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // close the primary database to ensure all the transactions are merged
     }
 
 }
