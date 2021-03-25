@@ -36,6 +36,7 @@ class MainActivity : CoRoutineUtilityClass() {
         val adapter=NotesRvAdapter(this)
         notesRecyclerView.adapter=adapter
 
+
         viewModel= ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(
                 application

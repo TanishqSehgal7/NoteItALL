@@ -7,8 +7,12 @@ import androidx.room.RoomDatabase
 import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
 import androidx.room.Room.databaseBuilder
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.security.interfaces.RSAMultiPrimePrivateCrtKey
 
-@Database(entities = [Note::class], exportSchema = false, version = 1)
+@Database(entities = arrayOf(Note::class), exportSchema = false, version = 1)
 abstract class NotesDataBase: RoomDatabase() {
 //    abstract val noteDao: NoteDao
 

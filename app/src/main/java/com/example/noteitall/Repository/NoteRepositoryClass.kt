@@ -4,6 +4,7 @@ import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryClass(private val noteDao: NoteDao) {
 
@@ -20,5 +21,10 @@ class NoteRepositoryClass(private val noteDao: NoteDao) {
     suspend fun AddMoreThanOneNote(note: Note){
         noteDao.addMoreThanOneNote(note)
     }
+
+    suspend fun UpdateNoteList(note: Note){
+        noteDao.updateExistingNote(note)
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.noteitall.ViewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.DataBase.NotesDataBase
@@ -30,6 +31,11 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
     fun AddMoreThanOneNotes(note: Note)=viewModelScope.launch(Dispatchers.IO) {
         noteRepositoryClass.AddMoreThanOneNote(note)
     }
+
+    fun UpdateNoteList(note: Note)=viewModelScope.launch(Dispatchers.IO) {
+        noteRepositoryClass.UpdateNoteList(note)
+    }
+
 
 
 }

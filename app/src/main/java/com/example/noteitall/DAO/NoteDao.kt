@@ -14,13 +14,13 @@ interface NoteDao {
     fun getAllNotes(): LiveData<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insetNewNote(note: Note)
+    suspend fun insetNewNote(vararg note: Note)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMoreThanOneNote(vararg note: Note)
 
-//    @Update
-//    suspend fun updateExistingNote(note: Note)
+    @Update
+    suspend fun updateExistingNote(note: Note)
 
     @Delete
     suspend fun deleteNote(note: Note)

@@ -84,6 +84,7 @@ class NotesActivity : CoRoutineUtilityClass() {
                 })
                 viewModel.saveNote(Note(noteTitleText,noteContentText))
                 viewModel.AddMoreThanOneNotes(Note(noteTitleText,noteContentText))
+                viewModel.UpdateNoteList(Note(noteTitleText,noteContentText))
                 replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
                 replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
                 setResult(Activity.RESULT_OK,replyIntent)
