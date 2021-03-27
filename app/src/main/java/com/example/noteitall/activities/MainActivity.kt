@@ -63,34 +63,28 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode==ADD_NOTE_REQ && resultCode== RESULT_OK){
-            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
-            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
-            note= Note(title, content)
-            viewModel.insertNewNote(note)
-        } else if (requestCode==EDIT_NOTE_REQ && resultCode== RESULT_OK){
-            val id:Int= data!!.getIntExtra(NotesActivity.EXTRA_NOTE_ID,-1)
-            if (id==-1){
-                Toast.makeText(this,"Cannot Update the Note",Toast.LENGTH_SHORT).show()
-                return
-            } else {
-                val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
-                val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
-                note= Note(title, content)
-                note.id=id
-                viewModel.UpdateNoteOnEdit(note)
-                Toast.makeText(this,"Note Updated",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // close the primary database to ensure all the transactions are merged
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode==ADD_NOTE_REQ && resultCode== RESULT_OK){
+//            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
+//            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
+//            note= Note(title, content)
+//            viewModel.insertNewNote(note)
+//        } else if (requestCode==EDIT_NOTE_REQ && resultCode== RESULT_OK){
+//            val id:Int= data!!.getIntExtra(NotesActivity.EXTRA_NOTE_ID,-1)
+//            if (id==-1){
+//                Toast.makeText(this,"Cannot Update the Note",Toast.LENGTH_SHORT).show()
+//                return
+//            } else {
+//                val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
+//                val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
+//                note= Note(title, content)
+//                note.id=id
+//                viewModel.UpdateNoteOnEdit(note)
+//                Toast.makeText(this,"Note Updated",Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 
     override fun OnNoteClickListener(note: Note) {
 //        val intent=Intent(this,NotesActivity::class.java).apply {

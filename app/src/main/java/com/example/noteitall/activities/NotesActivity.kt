@@ -87,13 +87,13 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 val note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
                 viewModel.insertNewNote(note)
-                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
-                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
-                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-                if (id!=-1) {
-                    replyIntent.putExtra(EXTRA_NOTE_ID, note.id)
-                }
-                setResult(Activity.RESULT_OK,replyIntent)
+//                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
+//                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
+//                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+//                if (id!=-1) {
+//                    replyIntent.putExtra(EXTRA_NOTE_ID, note.id)
+//                }
+//                setResult(Activity.RESULT_OK,replyIntent)
                 finish()
             }
         }
