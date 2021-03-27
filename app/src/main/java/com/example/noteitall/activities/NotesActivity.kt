@@ -80,7 +80,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 })
                 val note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
-                viewModel.saveNote(note)
+                viewModel.insertNewNote(note)
 //                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
 //                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
 //                setResult(Activity.RESULT_OK,replyIntent)
@@ -106,7 +106,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
             })
             val note = Note(noteTitleText, noteContentText)
             note.TimeandDate = currentTimeandDate
-            viewModel.saveNote(note)
+            viewModel.insertNewNote(note)
 //        replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
 //        replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
 //        setResult(Activity.RESULT_OK,replyIntent)

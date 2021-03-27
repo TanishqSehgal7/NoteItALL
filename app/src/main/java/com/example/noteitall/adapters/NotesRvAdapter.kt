@@ -35,6 +35,7 @@ class NotesRvAdapter(private val context: Context) : RecyclerView.Adapter<NotesR
         val currentNote=notesList[position]
         holder.tvTitle.text=currentNote.titleOFNote
         holder.tvNoteContent.text=currentNote.contentOFNote
+//        notifyItemInserted(position)
 
         holder.view.setOnClickListener {
             // open the saved note

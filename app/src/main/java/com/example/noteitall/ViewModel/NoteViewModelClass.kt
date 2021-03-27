@@ -1,6 +1,7 @@
 package com.example.noteitall.ViewModel
 
 import android.app.Application
+import android.widget.EditText
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.Repository.NoteRepositoryClass
+import com.example.noteitall.activities.MainActivity
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +23,10 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
     init {
         val noteDatabseDao=NotesDataBase.MakeTheDataBase(application).GetNoteDao()
         noteRepositoryClass=NoteRepositoryClass(noteDatabseDao)
-        allNotesLiveData=noteRepositoryClass.allNotes
+        allNotesLiveData= noteRepositoryClass.allNotes
     }
 
-    fun saveNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+    fun insertNewNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         noteRepositoryClass.insertNewNote(note)
     }
 
@@ -35,7 +37,4 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
     fun UpdateNoteList(note: Note)=viewModelScope.launch(Dispatchers.IO) {
         noteRepositoryClass.UpdateNoteList(note)
     }
-
-
-
 }

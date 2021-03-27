@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.security.interfaces.RSAMultiPrimePrivateCrtKey
 
-@Database(entities = arrayOf(Note::class), exportSchema = false, version = 1)
+@Database(entities = arrayOf(Note::class), exportSchema = false, version = 2)
 abstract class NotesDataBase: RoomDatabase() {
 //    abstract val noteDao: NoteDao
 
