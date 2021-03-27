@@ -18,9 +18,9 @@ class NoteRepositoryClass(private val noteDao: NoteDao) {
         noteDao.deleteNote(note)
     }
 
-    suspend fun AddMoreThanOneNote(note: Note){
-        noteDao.addMoreThanOneNote(note)
-    }
+//    suspend fun AddMoreThanOneNote(note: Note){
+//        noteDao.addMoreThanOneNote(note)
+//    }
 
     suspend fun UpdateNoteList(note: Note){
         noteDao.updateExistingNote(note)
