@@ -2,7 +2,6 @@ package com.example.noteitall.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.Layout
 import android.view.LayoutInflater
@@ -43,7 +42,7 @@ class NotesRvAdapter(private val context: Context) : RecyclerView.Adapter<NotesR
     }
 
     fun UpdateListAfterAnyChanges(updatedList : List<Note>){
-        notesList = (updatedList as ArrayList<Note>).clone() as ArrayList<Note>
+        notesList.addAll(updatedList)
         notifyDataSetChanged()
     }
 
@@ -51,7 +50,7 @@ class NotesRvAdapter(private val context: Context) : RecyclerView.Adapter<NotesR
        return notesList.size
     }
 
-    class NotesViewHolder(val view:View) : RecyclerView.ViewHolder(view){
+    inner class NotesViewHolder(val view:View) : RecyclerView.ViewHolder(view){
 
         val tvTitle:TextView=view.findViewById(R.id.RVNoteTitle)
         val tvNoteContent:TextView=view.findViewById(R.id.RVNoteContent)

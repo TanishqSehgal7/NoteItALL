@@ -13,8 +13,11 @@ interface NoteDao {
     @Query("SELECT * FROM Notes ORDER BY id DESC")
     fun getAllNotes(): LiveData<List<Note>>
 
-    @Insert
-    suspend fun insetNewNote(note: Note)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insetNewNote(vararg note: Note)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addMoreThanOneNote(vararg note: Note)
 
     @Update
     suspend fun updateExistingNote(note: Note)

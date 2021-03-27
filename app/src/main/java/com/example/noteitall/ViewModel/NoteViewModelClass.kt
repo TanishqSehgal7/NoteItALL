@@ -28,9 +28,9 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
         noteRepositoryClass.insertNewNote(note)
     }
 
-//    fun AddMoreThanOneNotes(note: Note)=viewModelScope.launch(Dispatchers.IO) {
-//        noteRepositoryClass.AddMoreThanOneNote(note)
-//    }
+    fun AddMoreThanOneNotes(note: Note)=viewModelScope.launch(Dispatchers.IO) {
+        noteRepositoryClass.AddMoreThanOneNote(note)
+    }
 
     fun UpdateNoteList(note: Note)=viewModelScope.launch(Dispatchers.IO) {
         noteRepositoryClass.UpdateNoteList(note)
