@@ -43,7 +43,7 @@ class MainActivity : CoRoutineUtilityClass() {
             )
         )
             .get(NoteViewModelClass::class.java)
-        viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list ->
+        viewModel.allNotesLiveData.observe(this, { list ->
             list?.let {
                 adapter.UpdateListAfterAnyChanges(it)
             }
@@ -53,19 +53,20 @@ class MainActivity : CoRoutineUtilityClass() {
         val addNote:FloatingActionButton= findViewById(R.id.Fab_AddNote)
         addNote.setOnClickListener {
             val intent=Intent(this, NotesActivity::class.java)
-            startActivityForResult(intent, ReqCodeForAddNote)
+//            startActivityForResult(intent, ReqCodeForAddNote)
+            startActivity(intent)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode==ReqCodeForAddNote && resultCode== RESULT_OK){
-            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
-            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
-            note= Note(title, content)
-            viewModel.saveNote(note)
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode==ReqCodeForAddNote && resultCode== RESULT_OK){
+//            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
+//            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
+//            note= Note(title, content)
+//            viewModel.saveNote(note)
+//        }
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
