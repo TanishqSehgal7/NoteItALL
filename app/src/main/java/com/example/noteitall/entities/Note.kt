@@ -8,8 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "Notes")
 data class Note(
     val titleOFNote: String,
-    val contentOFNote: String
-) {
+    val contentOFNote: String ): Serializable {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

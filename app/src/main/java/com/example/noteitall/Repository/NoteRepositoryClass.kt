@@ -22,7 +22,7 @@ class NoteRepositoryClass(private val noteDao: NoteDao) {
 //        noteDao.addMoreThanOneNote(note)
 //    }
 
-    suspend fun UpdateNoteList(note: Note){
+    suspend fun UpdateNoteOnEdit(note: Note){
         noteDao.updateExistingNote(note)
     }
 

@@ -31,7 +31,6 @@ class NotesActivity() : CoRoutineUtilityClass() {
     lateinit var note: Note
     private lateinit var noteTitleText: String
     private lateinit var noteContentText: String
-    private var notesList = ArrayList<Note>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +56,13 @@ class NotesActivity() : CoRoutineUtilityClass() {
         currentTimeandDate = sdf.format(Date())
         dateandtime.text = currentTimeandDate
 
+        val intent=Intent().apply {
+            if (intent.hasExtra(EXTRA_NOTE_ID)) {
+                noteTitle.setText(intent.getStringExtra(EXTRA_TITLE))
+                noteContent.setText(intent.getStringExtra(EXTRA_CONTENT))
+            }
+        }
+
         val SaveNoteButton: ImageButton = findViewById(R.id.SaveNote)
 
         SaveNoteButton.setOnClickListener {
@@ -81,9 +87,13 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 val note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
                 viewModel.insertNewNote(note)
-//                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
-//                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
-//                setResult(Activity.RESULT_OK,replyIntent)
+                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
+                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
+                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+                if (id!=-1) {
+                    replyIntent.putExtra(EXTRA_NOTE_ID, note.id)
+                }
+                setResult(Activity.RESULT_OK,replyIntent)
                 finish()
             }
         }
@@ -117,6 +127,6 @@ class NotesActivity() : CoRoutineUtilityClass() {
     companion object {
         val EXTRA_TITLE: String = "com.example.noteitall.activities.EXTRA_TITLE"
         val EXTRA_CONTENT: String = "com.example.noteitall.activities.EXTRA_CONTENT"
+        val EXTRA_NOTE_ID: String = "com.example.noteitall.activities.EXTRA_NOTE_ID"
     }
-
 }
