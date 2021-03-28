@@ -7,6 +7,8 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,13 +20,16 @@ import com.example.noteitall.adapters.NotesRvAdapter
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
 import java.text.FieldPosition
 
-class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListener{
+class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListener , NotesRvAdapter.DeleteNoteOnLongClickListener{
 
     lateinit var viewModel : NoteViewModelClass
     lateinit var notesRecyclerView:RecyclerView
     lateinit var deleteNoteBTN:ImageButton
+    lateinit var ClosedeleteNoteSelectionBTN:ImageButton
+    lateinit var searchView: androidx.appcompat.widget.SearchView
     lateinit var note:Note
     private val ADD_NOTE_REQ=1
     private val EDIT_NOTE_REQ=2
@@ -37,12 +42,15 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
 
         setContentView(R.layout.activity_main)
         deleteNoteBTN=findViewById(R.id.DeleteNote)
+        searchView=findViewById(R.id.search_btn)
+        ClosedeleteNoteSelectionBTN=findViewById(R.id.CloseDeleteNote)
         deleteNoteBTN.visibility=View.INVISIBLE
+        ClosedeleteNoteSelectionBTN.visibility=View.GONE
 
         notesRecyclerView=findViewById(R.id.NotesRV)
         notesRecyclerView.setHasFixedSize(true)
         notesRecyclerView.layoutManager=StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        val adapter=NotesRvAdapter(this,this)
+        val adapter=NotesRvAdapter(this,this,this)
         notesRecyclerView.adapter=adapter
 
 
@@ -56,7 +64,6 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
             list?.let {
                 adapter.UpdateListAfterAnyChanges(it)
             }
-
         })
 
         val addNote:FloatingActionButton= findViewById(R.id.Fab_AddNote)
@@ -96,11 +103,28 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
 //            intent.putExtra(NotesActivity.EXTRA_CONTENT, note.contentOFNote)
 //        }
 //            startActivityForResult(intent, EDIT_NOTE_REQ)
+        val intent=Intent(this,NotesActivity::class.java)
+        startActivity(intent)
+        deleteNoteBTN.visibility=View.GONE
+    }
+
+    override fun DeleteNoteOnLongClick(note: Note) {
         deleteNoteBTN.visibility=View.VISIBLE
+        ClosedeleteNoteSelectionBTN.visibility=View.VISIBLE
+        searchView.visibility=View.GONE
         deleteNoteBTN.setOnClickListener {
             viewModel.DeleteNote(note)
-            deleteNoteBTN.visibility=View.INVISIBLE
+            ClosedeleteNoteSelectionBTN.visibility=View.GONE
+            deleteNoteBTN.visibility=View.GONE
+            searchView.visibility=View.VISIBLE
         }
+
+        ClosedeleteNoteSelectionBTN.setOnClickListener {
+            deleteNoteBTN.visibility=View.GONE
+            ClosedeleteNoteSelectionBTN.visibility=View.GONE
+            searchView.visibility=View.VISIBLE
+        }
+
     }
 
 

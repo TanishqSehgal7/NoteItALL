@@ -4,4 +4,5 @@
     <string name="my_notes">My Notes</string>
     <string name="add_your_content_here">Add Your Content Here...</string>
     <string name="delete_note">Delete Note</string>
+    <string name="note_selected">Note Selected</string>
 </resources>

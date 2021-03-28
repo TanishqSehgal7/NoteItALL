@@ -14,19 +14,8 @@
       android:orientation="horizontal"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      android:layout_marginTop="20dp">
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:gravity="start"-->
-<!--        android:text="@string/my_notes"-->
-<!--        android:textSize="20sp"-->
-<!--        android:textColor="@color/white"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+      android:layout_marginTop="10dp"
+      android:padding="10dp">
 
 <!--    <com.mikhaellopez.circularimageview.CircularImageView-->
 <!--        android:layout_width="48dp"-->
@@ -39,25 +28,33 @@
 <!--        app:civ_border_color="@color/MyColorDark"-->
 <!--        android:focusable="true"/>-->
 
+      <ImageButton
+          android:id="@+id/CloseDeleteNote"
+          android:layout_width="50dp"
+          android:layout_height="50dp"
+          android:layout_marginEnd="10dp"
+          android:visibility="gone"
+          android:src="@drawable/ic_baseline_close_24"
+          android:background="@drawable/bg_view" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_btn"
         android:layout_width="match_parent"
-        android:layout_marginEnd="50dp"
         android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_view"
         app:queryHint="Search Your Notes Here"
         android:clickable="true"
-        app:iconifiedByDefault="false"
-        android:layout_alignRight="@+id/DeleteNote"
-        android:layout_toLeftOf="@+id/DeleteNote" />
+        app:iconifiedByDefault="false" />
 
     <ImageButton
         android:id="@+id/DeleteNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone"
         android:src="@drawable/ic_baseline_delete_24"
-        app:backgroundTint="@color/MyYellow"
+        android:background="@drawable/bg_view"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"/>
 
@@ -66,11 +63,11 @@
   <View
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      app:layout_constraintTop_toBottomOf="@+id/search_layout"
+      android:layout_alignBottom="@+id/search_layout"
       android:background="@drawable/bg_view"
       android:layout_marginStart="5dp"
       android:layout_marginEnd="5dp"
-      android:layout_marginTop="10dp"/>
+      android:layout_marginTop="30dp"/>
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/Fab_AddNote"
