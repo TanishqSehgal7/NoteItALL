@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.noteitall">
 
     <application
@@ -10,11 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteItALL">
         <activity android:name=".activities.NotesActivity"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/Theme.NoteItALL"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

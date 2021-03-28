@@ -3,6 +3,7 @@ package com.example.noteitall.activities
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -17,11 +18,13 @@ import com.example.noteitall.adapters.NotesRvAdapter
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.FieldPosition
 
 class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListener{
 
     lateinit var viewModel : NoteViewModelClass
     lateinit var notesRecyclerView:RecyclerView
+    lateinit var deleteNoteBTN:ImageButton
     lateinit var note:Note
     private val ADD_NOTE_REQ=1
     private val EDIT_NOTE_REQ=2
@@ -33,6 +36,8 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
         WindowManager.LayoutParams.FLAG_FULLSCREEN
 
         setContentView(R.layout.activity_main)
+        deleteNoteBTN=findViewById(R.id.DeleteNote)
+        deleteNoteBTN.visibility=View.INVISIBLE
 
         notesRecyclerView=findViewById(R.id.NotesRV)
         notesRecyclerView.setHasFixedSize(true)
@@ -59,8 +64,6 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
             val intent=Intent(this, NotesActivity::class.java)
             startActivityForResult(intent,ADD_NOTE_REQ)
         }
-
-
     }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,8 +96,11 @@ class MainActivity : CoRoutineUtilityClass() , NotesRvAdapter.NoteItemClickListe
 //            intent.putExtra(NotesActivity.EXTRA_CONTENT, note.contentOFNote)
 //        }
 //            startActivityForResult(intent, EDIT_NOTE_REQ)
-        viewModel.DeleteNote(note)
-
+        deleteNoteBTN.visibility=View.VISIBLE
+        deleteNoteBTN.setOnClickListener {
+            viewModel.DeleteNote(note)
+            deleteNoteBTN.visibility=View.INVISIBLE
+        }
     }
 
 

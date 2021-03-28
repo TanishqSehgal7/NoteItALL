@@ -5,8 +5,10 @@ import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -25,9 +27,18 @@ class NotesRvAdapter(private val context: Context,private val noteItemClickListe
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val viewHolder=NotesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.notes_card_layout,parent,false))
-        viewHolder.deleteNote.setOnClickListener {
-            noteItemClickListener.OnNoteClickListener(notesList[viewHolder.adapterPosition])
-        }
+
+        viewHolder.deleteNoteCheckBox.visibility=View.INVISIBLE
+
+        viewHolder.itemView.setOnLongClickListener(View.OnLongClickListener {
+            viewHolder.itemView.requestFocus()
+            viewHolder.deleteNoteCheckBox.visibility=View.VISIBLE
+            if (viewHolder.deleteNoteCheckBox.isChecked) {
+                noteItemClickListener.OnNoteClickListener(notesList[viewHolder.adapterPosition])
+            }
+            true
+        })
+
         return viewHolder
     }
 
@@ -37,9 +48,14 @@ class NotesRvAdapter(private val context: Context,private val noteItemClickListe
         holder.tvNoteContent.text=currentNote.contentOFNote
 
         holder.itemView.setOnClickListener {
-            noteItemClickListener.OnNoteClickListener(currentNote)
+            Toast.makeText(context,"Long Click the note to Delete",Toast.LENGTH_SHORT).show()
         }
 
+        holder.itemView.setOnLongClickListener {
+            holder.deleteNoteCheckBox.visibility=View.VISIBLE
+                noteItemClickListener.OnNoteClickListener(currentNote)
+            true
+        }
     }
 
     fun UpdateListAfterAnyChanges(updatedList : List<Note>){
@@ -54,7 +70,7 @@ class NotesRvAdapter(private val context: Context,private val noteItemClickListe
     class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view){
         val tvTitle:TextView=view.findViewById(R.id.RVNoteTitle)
         val tvNoteContent:TextView=view.findViewById(R.id.RVNoteContent)
-        val deleteNote: ImageButton =view.findViewById(R.id.deleteNote)
+        val deleteNoteCheckBox: CheckBox =view.findViewById(R.id.SelectdeleteNote)
     }
 
     interface NoteItemClickListener{
