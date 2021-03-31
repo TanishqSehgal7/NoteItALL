@@ -60,6 +60,7 @@ private val deleteNoteOnLongClickListener: DeleteNoteOnLongClickListener) : Recy
     }
 
     fun UpdateListAfterAnyChanges(updatedList : List<Note>){
+        notesList.clear()
         notesList = (updatedList as ArrayList<Note>).clone() as ArrayList<Note>
         notifyDataSetChanged()
     }

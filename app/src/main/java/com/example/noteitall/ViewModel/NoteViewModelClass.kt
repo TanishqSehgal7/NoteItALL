@@ -37,4 +37,5 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
     fun UpdateNoteOnEdit(note: Note)=viewModelScope.launch(Dispatchers.IO) {
         noteRepositoryClass.UpdateNoteOnEdit(note)
     }
+
 }

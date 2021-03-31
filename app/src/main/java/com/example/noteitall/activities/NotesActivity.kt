@@ -85,21 +85,27 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list ->
 
                 })
-                val note = Note(noteTitleText, noteContentText)
+                note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
-                viewModel.insertNewNote(note)
                 replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
                 replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
-
-                if (note==null){
-                    viewModel.insertNewNote(note)
-                } else {
+                var id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+                id=note.id
+                if (id!=-1) {
+                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
                     viewModel.UpdateNoteOnEdit(note)
                 }
-//
+                    viewModel.insertNewNote(note)
+//                replyIntent.putExtra(EXTRA_NOTE_ID,note.id)
+//                    viewModel.insertNewNote(note)
+
+//                replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
+//                replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
+
 //                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
 //                if (id!=-1){
 //                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
+//                    viewModel.UpdateNoteOnEdit(note)
 //                }
 //                setResult(RESULT_OK, replyIntent)
                 finish()
@@ -125,19 +131,17 @@ class NotesActivity() : CoRoutineUtilityClass() {
             viewModel.allNotesLiveData.observe(this, { list ->
 
             })
-            val note = Note(noteTitleText, noteContentText)
+            note = Note(noteTitleText, noteContentText)
             note.TimeandDate = currentTimeandDate
-//            viewModel.insertNewNote(note)
-//
+            viewModel.insertNewNote(note)
+
+            if (note!=null){
+                viewModel.UpdateNoteOnEdit(note)
+            }
+
             val data=Intent()
             data.putExtra(EXTRA_TITLE,noteTitleText)
             data.putExtra(EXTRA_CONTENT,noteContentText)
-
-            if (note==null){
-                viewModel.insertNewNote(note)
-            } else {
-                viewModel.UpdateNoteOnEdit(note)
-            }
 
 //            val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
 //            if (id!=-1){

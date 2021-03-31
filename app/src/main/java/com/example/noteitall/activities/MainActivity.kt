@@ -94,6 +94,7 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
         intent.putExtra(NotesActivity.EXTRA_TITLE,note.titleOFNote)
         intent.putExtra(NotesActivity.EXTRA_CONTENT,note.contentOFNote)
         startActivityForResult(intent,EDIT_NOTE_REQ)
+        viewModel.DeleteNote(note)
     }
 
     override fun DeleteNoteOnLongClick(note: Note) {
