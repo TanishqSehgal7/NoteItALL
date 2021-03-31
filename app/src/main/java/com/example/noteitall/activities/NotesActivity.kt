@@ -2,6 +2,7 @@ package com.example.noteitall.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -31,6 +32,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
     lateinit var note: Note
     private lateinit var noteTitleText: String
     private lateinit var noteContentText: String
+    private lateinit var SetAlarmToNote:ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,17 +58,16 @@ class NotesActivity() : CoRoutineUtilityClass() {
         currentTimeandDate = sdf.format(Date())
         dateandtime.text = currentTimeandDate
 
-        val intent=Intent().apply {
-            if (intent.hasExtra(EXTRA_NOTE_ID)) {
-                noteTitle.setText(intent.getStringExtra(EXTRA_TITLE))
-                noteContent.setText(intent.getStringExtra(EXTRA_CONTENT))
-            }
+        val SaveNoteButton: ImageButton = findViewById(R.id.SaveNote)
+        val replyIntent = Intent()
+
+        if (replyIntent.hasExtra(EXTRA_NOTE_ID)){
+            noteTitle.setText(intent.getStringExtra(EXTRA_TITLE))
+            noteContent.setText(intent.getStringExtra(EXTRA_CONTENT))
         }
 
-        val SaveNoteButton: ImageButton = findViewById(R.id.SaveNote)
 
         SaveNoteButton.setOnClickListener {
-            val replyIntent = Intent()
             if (noteTitle.text.toString().trim().isEmpty()) {
                 noteTitle.requestFocus()
                 noteTitle.error = "Title required!"
@@ -87,16 +88,20 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 val note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
                 viewModel.insertNewNote(note)
-//                replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
-//                replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
-//                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-//                if (id!=-1) {
-//                    replyIntent.putExtra(EXTRA_NOTE_ID, note.id)
-//                }
-//                setResult(Activity.RESULT_OK,replyIntent)
+                replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
+                replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
+
+                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+                if (id!=-1){
+                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
+                }
+                setResult(RESULT_OK, replyIntent)
                 finish()
             }
         }
+
+
+
     }
 
     override fun onBackPressed() {
@@ -117,9 +122,16 @@ class NotesActivity() : CoRoutineUtilityClass() {
             val note = Note(noteTitleText, noteContentText)
             note.TimeandDate = currentTimeandDate
             viewModel.insertNewNote(note)
-//        replyIntent.putExtra(EXTRA_TITLE,noteTitleText)
-//        replyIntent.putExtra(EXTRA_CONTENT,noteContentText)
-//        setResult(Activity.RESULT_OK,replyIntent)
+
+            val data=Intent()
+            data.putExtra(EXTRA_TITLE,noteTitleText)
+            data.putExtra(EXTRA_CONTENT,noteContentText)
+
+            val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+            if (id!=-1){
+                data.putExtra(EXTRA_NOTE_ID,id)
+            }
+            setResult(RESULT_OK, data)
         }
         super.onBackPressed()
     }
