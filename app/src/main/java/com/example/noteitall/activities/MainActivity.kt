@@ -75,29 +75,6 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
         }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode==ADD_NOTE_REQ && resultCode== RESULT_OK){
-//            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
-//            val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
-//            note= Note(title, content)
-//            viewModel.insertNewNote(note)
-//        } else if (requestCode==EDIT_NOTE_REQ && resultCode== RESULT_OK){
-//            val id:Int= data!!.getIntExtra(NotesActivity.EXTRA_NOTE_ID,-1)
-//            if (id==-1){
-//                Toast.makeText(this,"Cannot Update the Note",Toast.LENGTH_SHORT).show()
-//                return
-//            } else {
-//                val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE)!!
-//                val content: String = data.getStringExtra(NotesActivity.EXTRA_CONTENT)!!
-//                note= Note(title, content)
-//                note.id=id
-//                viewModel.UpdateNoteOnEdit(note)
-//                Toast.makeText(this,"Note Updated",Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
     override fun onBackPressed() {
         if (deleteNoteBTN.visibility == View.VISIBLE && ClosedeleteNoteSelectionBTN.visibility == View.VISIBLE && searchView.visibility == View.GONE) {
             deleteNoteBTN.visibility = View.GONE
@@ -107,12 +84,6 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
     }
 
     override fun OnNoteClickListener(note: Note) {
-//        val intent=Intent(this,NotesActivity::class.java).apply {
-//            intent.putExtra(NotesActivity.EXTRA_NOTE_ID, note.id)
-//            intent.putExtra(NotesActivity.EXTRA_TITLE, note.titleOFNote)
-//            intent.putExtra(NotesActivity.EXTRA_CONTENT, note.contentOFNote)
-//        }
-//            startActivityForResult(intent, EDIT_NOTE_REQ)
         val intent = Intent(this, NotesActivity::class.java)
 
         deleteNoteBTN.visibility = View.GONE
@@ -121,8 +92,8 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
 
         intent.putExtra(NotesActivity.EXTRA_NOTE_ID,note.id)
         intent.putExtra(NotesActivity.EXTRA_TITLE,note.titleOFNote)
-        intent.putExtra(NotesActivity.EXTRA_CONTENT,note.titleOFNote)
-        startActivity(intent)
+        intent.putExtra(NotesActivity.EXTRA_CONTENT,note.contentOFNote)
+        startActivityForResult(intent,EDIT_NOTE_REQ)
     }
 
     override fun DeleteNoteOnLongClick(note: Note) {
@@ -157,14 +128,14 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
             if (id==-1){
                 Toast.makeText(this,"Cannot Update Note",Toast.LENGTH_SHORT).show()
             }
-
             val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE).toString()
             val content:String= data?.getStringExtra(NotesActivity.EXTRA_CONTENT).toString()
             note=Note(title,content)
             viewModel.UpdateNoteOnEdit(note)
-        } else {
-            Toast.makeText(this,"Can't Save Note",Toast.LENGTH_SHORT).show()
         }
+//        else {
+//            Toast.makeText(this,"Can't Save Note",Toast.LENGTH_SHORT).show()
+//        }
 
     }
 

@@ -61,7 +61,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
         val SaveNoteButton: ImageButton = findViewById(R.id.SaveNote)
         val replyIntent = Intent()
 
-        if (replyIntent.hasExtra(EXTRA_NOTE_ID)){
+        if (intent.hasExtra(EXTRA_NOTE_ID)){
             noteTitle.setText(intent.getStringExtra(EXTRA_TITLE))
             noteContent.setText(intent.getStringExtra(EXTRA_CONTENT))
         }
@@ -91,11 +91,17 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
                 replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
 
-                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-                if (id!=-1){
-                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
+                if (note==null){
+                    viewModel.insertNewNote(note)
+                } else {
+                    viewModel.UpdateNoteOnEdit(note)
                 }
-                setResult(RESULT_OK, replyIntent)
+//
+//                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+//                if (id!=-1){
+//                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
+//                }
+//                setResult(RESULT_OK, replyIntent)
                 finish()
             }
         }
@@ -121,17 +127,23 @@ class NotesActivity() : CoRoutineUtilityClass() {
             })
             val note = Note(noteTitleText, noteContentText)
             note.TimeandDate = currentTimeandDate
-            viewModel.insertNewNote(note)
-
+//            viewModel.insertNewNote(note)
+//
             val data=Intent()
             data.putExtra(EXTRA_TITLE,noteTitleText)
             data.putExtra(EXTRA_CONTENT,noteContentText)
 
-            val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-            if (id!=-1){
-                data.putExtra(EXTRA_NOTE_ID,id)
+            if (note==null){
+                viewModel.insertNewNote(note)
+            } else {
+                viewModel.UpdateNoteOnEdit(note)
             }
-            setResult(RESULT_OK, data)
+
+//            val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
+//            if (id!=-1){
+//                data.putExtra(EXTRA_NOTE_ID,id)
+//            }
+//            setResult(RESULT_OK, data)
         }
         super.onBackPressed()
     }
