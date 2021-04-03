@@ -134,10 +134,6 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
             note=Note(title,content)
             viewModel.UpdateNoteOnEdit(note)
         }
-//        else {
-//            Toast.makeText(this,"Can't Save Note",Toast.LENGTH_SHORT).show()
-//        }
-
     }
 
 

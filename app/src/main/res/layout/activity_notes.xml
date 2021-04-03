@@ -39,7 +39,7 @@
             android:layout_alignParentEnd="true">
 
         <ImageButton
-            android:id="@+id/SetAlarm"
+            android:id="@+id/SetReminder"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_baseline_access_alarm_24"

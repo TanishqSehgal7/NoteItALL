@@ -1,6 +1,8 @@
 package com.example.noteitall.activities
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
@@ -19,6 +22,7 @@ import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.CoRoutineUtilityClass
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,7 +36,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
     lateinit var note: Note
     private lateinit var noteTitleText: String
     private lateinit var noteContentText: String
-    private lateinit var SetAlarmToNote:ImageButton
+    private lateinit var SetNotificationForNote:ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +46,10 @@ class NotesActivity() : CoRoutineUtilityClass() {
         WindowManager.LayoutParams.FLAG_FULLSCREEN
         setContentView(R.layout.activity_notes)
 
-        viewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        )
             .get(NoteViewModelClass::class.java)
 
         val backButton: ImageButton = findViewById(R.id.NotActivityExit)
@@ -50,9 +57,9 @@ class NotesActivity() : CoRoutineUtilityClass() {
             finish()
         }
 
-        noteTitle=findViewById(R.id.Title_ET)
-        noteContent=findViewById(R.id.NoteContent)
-        dateandtime=findViewById(R.id.DateAndTimeTV)
+        noteTitle = findViewById(R.id.Title_ET)
+        noteContent = findViewById(R.id.NoteContent)
+        dateandtime = findViewById(R.id.DateAndTimeTV)
 
         val sdf = SimpleDateFormat("dd/M/yyyy @ hh:mm:ss")
         currentTimeandDate = sdf.format(Date())
@@ -61,7 +68,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
         val SaveNoteButton: ImageButton = findViewById(R.id.SaveNote)
         val replyIntent = Intent()
 
-        if (intent.hasExtra(EXTRA_NOTE_ID)){
+        if (intent.hasExtra(EXTRA_NOTE_ID)) {
             noteTitle.setText(intent.getStringExtra(EXTRA_TITLE))
             noteContent.setText(intent.getStringExtra(EXTRA_CONTENT))
         }
@@ -87,15 +94,15 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 })
                 note = Note(noteTitleText, noteContentText)
                 note.TimeandDate = currentTimeandDate
-                replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
-                replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
-                var id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-                id=note.id
-                if (id!=-1) {
-                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
+                replyIntent.putExtra(EXTRA_TITLE, note.titleOFNote)
+                replyIntent.putExtra(EXTRA_CONTENT, note.contentOFNote)
+                var id: Int = intent.getIntExtra(EXTRA_NOTE_ID, -1)
+                id = note.id
+                if (id != -1) {
+                    replyIntent.putExtra(EXTRA_NOTE_ID, id)
                     viewModel.UpdateNoteOnEdit(note)
                 }
-                    viewModel.insertNewNote(note)
+                viewModel.insertNewNote(note)
 //                replyIntent.putExtra(EXTRA_NOTE_ID,note.id)
 //                    viewModel.insertNewNote(note)
 
@@ -112,6 +119,48 @@ class NotesActivity() : CoRoutineUtilityClass() {
             }
         }
 
+
+        SetNotificationForNote = findViewById(R.id.SetReminder)
+        SetNotificationForNote.setOnClickListener {
+//            val intent=Intent(this,SetReminderWithDateAndTimePicker::class.java)
+//            this.startActivity(intent)
+            val dateFormat=SimpleDateFormat("dd MMM YYYY",Locale.US)
+            val timeFormat=SimpleDateFormat("hh mm a", Locale.US)
+            val calendar=Calendar.getInstance()
+            val dateForReminder=Calendar.getInstance()
+            val timeForReminder=Calendar.getInstance()
+            val datePickerDialog= DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
+                    view, year, month, day ->
+                dateForReminder.set(Calendar.YEAR,year)
+                dateForReminder.set(Calendar.MONTH,month)
+                dateForReminder.set(Calendar.DAY_OF_MONTH,day)
+                val SelectedDate=dateFormat.format(dateForReminder.time)
+                Toast.makeText(this,SelectedDate,Toast.LENGTH_SHORT).show()
+
+                val timePickerDialog=TimePickerDialog(this, TimePickerDialog.OnTimeSetListener {
+                        view, hours, minutes ->
+                    timeForReminder.set(Calendar.HOUR_OF_DAY,hours)
+                    timeForReminder.set(Calendar.MINUTE,minutes)
+                    val selectedTime=timeFormat.format(timeForReminder.time)
+                    Toast.makeText(this,selectedTime,Toast.LENGTH_SHORT).show()
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+                    false)
+                timePickerDialog.show()
+
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            datePickerDialog.show()
+
+//            val timePickerDialog=TimePickerDialog(this, TimePickerDialog.OnTimeSetListener {
+//                    view, hours, minutes ->
+//                timeForReminder.set(Calendar.HOUR_OF_DAY,hours)
+//                timeForReminder.set(Calendar.MINUTE,minutes)
+//                val selectedTime=timeFormat.format(timeForReminder.time)
+//                Toast.makeText(this,selectedTime,Toast.LENGTH_SHORT).show()
+//            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+//                false)
+//            timePickerDialog.show()
+
+        }
 
 
     }
