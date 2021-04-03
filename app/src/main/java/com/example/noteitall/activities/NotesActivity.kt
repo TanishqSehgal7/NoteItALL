@@ -52,11 +52,6 @@ class NotesActivity() : CoRoutineUtilityClass() {
         )
             .get(NoteViewModelClass::class.java)
 
-        val backButton: ImageButton = findViewById(R.id.NotActivityExit)
-        backButton.setOnClickListener {
-            finish()
-        }
-
         noteTitle = findViewById(R.id.Title_ET)
         noteContent = findViewById(R.id.NoteContent)
         dateandtime = findViewById(R.id.DateAndTimeTV)
@@ -117,10 +112,45 @@ class NotesActivity() : CoRoutineUtilityClass() {
 //                setResult(RESULT_OK, replyIntent)
                 finish()
             }
+
+        }
+
+        val backButton: ImageButton = findViewById(R.id.NotActivityExit)
+        backButton.setOnClickListener {
+            if (noteTitle.text.toString().trim().isEmpty()) {
+                noteTitle.requestFocus()
+                noteTitle.error = "Title required!"
+                Toast.makeText(this, "Please enter the note title", Toast.LENGTH_SHORT).show()
+
+            } else if (noteContent.text.toString().trim().isEmpty()) {
+                noteContent.requestFocus()
+                noteTitle.error = "Note body required!"
+                Toast.makeText(this, "Note Content cannot be empty", Toast.LENGTH_SHORT).show()
+
+            } else {
+                noteTitleText = noteTitle.text.toString()
+                noteContentText = noteContent.text.toString()
+
+                viewModel.allNotesLiveData.observe(this, androidx.lifecycle.Observer { list ->
+
+                })
+                note = Note(noteTitleText, noteContentText)
+                note.TimeandDate = currentTimeandDate
+                replyIntent.putExtra(EXTRA_TITLE, note.titleOFNote)
+                replyIntent.putExtra(EXTRA_CONTENT, note.contentOFNote)
+                var id: Int = intent.getIntExtra(EXTRA_NOTE_ID, -1)
+                id = note.id
+                if (id != -1) {
+                    replyIntent.putExtra(EXTRA_NOTE_ID, id)
+                    viewModel.UpdateNoteOnEdit(note)
+                }
+                viewModel.insertNewNote(note)
+                finish()
+            }
         }
 
 
-        SetNotificationForNote = findViewById(R.id.SetReminder)
+            SetNotificationForNote = findViewById(R.id.SetReminder)
         SetNotificationForNote.setOnClickListener {
 //            val intent=Intent(this,SetReminderWithDateAndTimePicker::class.java)
 //            this.startActivity(intent)
@@ -129,7 +159,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
             val calendar=Calendar.getInstance()
             val dateForReminder=Calendar.getInstance()
             val timeForReminder=Calendar.getInstance()
-            val datePickerDialog= DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
+            val datePickerDialog= DatePickerDialog(this, R.style.DatePickerDialog, DatePickerDialog.OnDateSetListener {
                     view, year, month, day ->
                 dateForReminder.set(Calendar.YEAR,year)
                 dateForReminder.set(Calendar.MONTH,month)
@@ -137,7 +167,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
                 val SelectedDate=dateFormat.format(dateForReminder.time)
                 Toast.makeText(this,SelectedDate,Toast.LENGTH_SHORT).show()
 
-                val timePickerDialog=TimePickerDialog(this, TimePickerDialog.OnTimeSetListener {
+                val timePickerDialog=TimePickerDialog(this, R.style.DatePickerDialog, TimePickerDialog.OnTimeSetListener {
                         view, hours, minutes ->
                     timeForReminder.set(Calendar.HOUR_OF_DAY,hours)
                     timeForReminder.set(Calendar.MINUTE,minutes)

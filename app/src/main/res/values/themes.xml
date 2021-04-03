@@ -7,10 +7,18 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/black</item>
-        <item name="colorSecondaryVariant">@color/purple_500</item>
+        <item name="colorSecondaryVariant">@color/MyYellow</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="DatePickerDialog" parent="android:Theme.Material.Dialog.Alert">
+        <item name="colorAccent">@color/MyYellow</item>
+        <item name="colorPrimary">@color/MyYellow</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/MyColorDark</item>
+    </style>
+
 </resources>
