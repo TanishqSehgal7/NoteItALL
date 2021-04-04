@@ -17,8 +17,6 @@
     <style name="DatePickerDialog" parent="android:Theme.Material.Dialog.Alert">
         <item name="colorAccent">@color/MyYellow</item>
         <item name="colorPrimary">@color/MyYellow</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/MyColorDark</item>
     </style>
 
 </resources>

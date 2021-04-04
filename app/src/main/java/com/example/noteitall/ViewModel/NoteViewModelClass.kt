@@ -38,4 +38,8 @@ class NoteViewModelClass(application:Application) : AndroidViewModel(application
         noteRepositoryClass.UpdateNoteOnEdit(note)
     }
 
+    fun SearchNoteDatabase(searchQuery:String) : LiveData<List<Note>>{
+        return noteRepositoryClass.SearchNoteDatabase(searchQuery)
+    }
+
 }

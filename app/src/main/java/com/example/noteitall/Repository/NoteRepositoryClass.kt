@@ -4,6 +4,7 @@ import com.example.noteitall.DAO.NoteDao
 import com.example.noteitall.entities.Note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryClass(private val noteDao: NoteDao) {
@@ -22,5 +23,8 @@ class NoteRepositoryClass(private val noteDao: NoteDao) {
         noteDao.updateExistingNote(note)
     }
 
+    fun SearchNoteDatabase(searchQuery: String): LiveData<List<Note>>{
+        return noteDao.SearchNoteDatabase(searchQuery)
+    }
 
 }

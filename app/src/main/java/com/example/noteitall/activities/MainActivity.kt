@@ -7,6 +7,7 @@ import android.view.ViewAnimationUtils
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.SearchView
 import android.widget.Toast
 import android.widget.ViewAnimator
 import androidx.core.view.marginBottom
@@ -22,7 +23,7 @@ import com.example.noteitall.utility.CoRoutineUtilityClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListener,
-    NotesRvAdapter.DeleteNoteOnLongClickListener {
+    NotesRvAdapter.DeleteNoteOnLongClickListener, androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
     lateinit var viewModel: NoteViewModelClass
     lateinit var notesRecyclerView: RecyclerView
@@ -95,6 +96,9 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
             }
         })
 
+        searchView.isSubmitButtonEnabled=true
+        searchView.setOnQueryTextListener(this)
+
     }
 
     override fun onBackPressed() {
@@ -159,5 +163,27 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
         }
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query!=null){
+            SearchNote(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query!=null){
+            SearchNote(query)
+        }
+        return true
+    }
+
+    private fun SearchNote(query: String?){
+        val searchNote="$query%"
+        viewModel.SearchNoteDatabase(searchNote).observe(this,{list->
+            list.let {
+                adapter.UpdateListAfterAnyChanges(it)
+            }
+        })
+    }
 
 }
