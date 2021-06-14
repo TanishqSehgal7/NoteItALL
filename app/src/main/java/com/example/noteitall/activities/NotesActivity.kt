@@ -1,10 +1,10 @@
 package com.example.noteitall.activities
 
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.media.Image
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,7 +20,10 @@ import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
 import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.entities.Note
+import com.example.noteitall.utility.AlarmBroasCastReceiver
 import com.example.noteitall.utility.CoRoutineUtilityClass
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import java.text.SimpleDateFormat
@@ -37,6 +40,11 @@ class NotesActivity() : CoRoutineUtilityClass() {
     private lateinit var noteTitleText: String
     private lateinit var noteContentText: String
     private lateinit var SetNotificationForNote:ImageButton
+
+    lateinit var timePicker: MaterialTimePicker
+    lateinit var calendar: Calendar
+    lateinit var alarmManager: AlarmManager
+    lateinit var pendingIntent: PendingIntent
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,50 +157,12 @@ class NotesActivity() : CoRoutineUtilityClass() {
             }
         }
 
+        CreateNotificationChannelForAlarm()
 
-            SetNotificationForNote = findViewById(R.id.SetReminder)
+        SetNotificationForNote = findViewById(R.id.SetReminder)
         SetNotificationForNote.setOnClickListener {
-//            val intent=Intent(this,SetReminderWithDateAndTimePicker::class.java)
-//            this.startActivity(intent)
-            val dateFormat=SimpleDateFormat("dd MMM YYYY",Locale.US)
-            val timeFormat=SimpleDateFormat("hh mm a", Locale.US)
-            val calendar=Calendar.getInstance()
-            val dateForReminder=Calendar.getInstance()
-            val timeForReminder=Calendar.getInstance()
-            val datePickerDialog= DatePickerDialog(this, R.style.DatePickerDialog, DatePickerDialog.OnDateSetListener {
-                    view, year, month, day ->
-                dateForReminder.set(Calendar.YEAR,year)
-                dateForReminder.set(Calendar.MONTH,month)
-                dateForReminder.set(Calendar.DAY_OF_MONTH,day)
-                val SelectedDate=dateFormat.format(dateForReminder.time)
-                Toast.makeText(this,SelectedDate,Toast.LENGTH_SHORT).show()
-
-                val timePickerDialog=TimePickerDialog(this, R.style.DatePickerDialog, TimePickerDialog.OnTimeSetListener {
-                        view, hours, minutes ->
-                    timeForReminder.set(Calendar.HOUR_OF_DAY,hours)
-                    timeForReminder.set(Calendar.MINUTE,minutes)
-                    val selectedTime=timeFormat.format(timeForReminder.time)
-                    Toast.makeText(this,selectedTime,Toast.LENGTH_SHORT).show()
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
-                    false)
-                timePickerDialog.show()
-
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            datePickerDialog.show()
-
-//            val timePickerDialog=TimePickerDialog(this, TimePickerDialog.OnTimeSetListener {
-//                    view, hours, minutes ->
-//                timeForReminder.set(Calendar.HOUR_OF_DAY,hours)
-//                timeForReminder.set(Calendar.MINUTE,minutes)
-//                val selectedTime=timeFormat.format(timeForReminder.time)
-//                Toast.makeText(this,selectedTime,Toast.LENGTH_SHORT).show()
-//            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
-//                false)
-//            timePickerDialog.show()
-
+            ShowTimePicker()
         }
-
-
     }
 
     override fun onBackPressed() {
@@ -221,16 +191,49 @@ class NotesActivity() : CoRoutineUtilityClass() {
             val data=Intent()
             data.putExtra(EXTRA_TITLE,noteTitleText)
             data.putExtra(EXTRA_CONTENT,noteContentText)
-
-//            val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-//            if (id!=-1){
-//                data.putExtra(EXTRA_NOTE_ID,id)
-//            }
-//            setResult(RESULT_OK, data)
         }
         super.onBackPressed()
     }
 
+    fun CreateNotificationChannelForAlarm() {
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            val channelName: CharSequence = "NotificationForNote"
+            val description = "Channel for the Note Notification"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel =
+                NotificationChannel("alarmNotificationForNote", channelName, importance)
+            notificationChannel.description = description
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+    }
+
+    fun ShowTimePicker() {
+        timePicker=MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(12).setMinute(0).setTitleText("Select Time").build()
+
+        timePicker.show(supportFragmentManager,"alarmNotificationForNote")
+        timePicker.addOnPositiveButtonClickListener {
+
+            calendar= Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY,timePicker.hour)
+            calendar.set(Calendar.MINUTE,timePicker.minute)
+            calendar.set(Calendar.SECOND,0)
+            calendar.set(Calendar.MILLISECOND,0)
+            SetAlarm()
+        }
+    }
+
+    fun SetAlarm() {
+        alarmManager=getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent=Intent(this,AlarmBroasCastReceiver::class.java)
+        pendingIntent= PendingIntent.getBroadcast(this, 0, intent, 0)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
+        Toast.makeText(this,"Alarm Set Successfully",Toast.LENGTH_SHORT).show()
+    }
     companion object {
         val EXTRA_TITLE: String = "com.example.noteitall.activities.EXTRA_TITLE"
         val EXTRA_CONTENT: String = "com.example.noteitall.activities.EXTRA_CONTENT"

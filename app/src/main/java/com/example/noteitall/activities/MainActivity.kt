@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageButton
-import android.widget.SearchView
-import android.widget.Toast
-import android.widget.ViewAnimator
+import android.widget.*
 import androidx.core.view.marginBottom
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager

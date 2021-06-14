@@ -26,16 +26,15 @@
             android:textColor="@color/white"
             android:fontFamily="sans-serif-black"/>
 
-        <TextView
-            android:id="@+id/RVNoteContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Note Content"
-            android:textSize="16dp"
-            android:padding="10dp"
-            android:textColor="@color/white"
-            android:fontFamily="sans-serif"/>
-
+            <TextView
+                android:id="@+id/RVNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Note Content"
+                android:textSize="16dp"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
