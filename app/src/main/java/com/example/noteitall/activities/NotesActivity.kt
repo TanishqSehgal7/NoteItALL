@@ -216,6 +216,12 @@ class NotesActivity() : CoRoutineUtilityClass() {
             calendar.set(Calendar.SECOND,0)
             calendar.set(Calendar.MILLISECOND,0)
             SetAlarm()
+
+            val broadcastIntent = Intent(application, AlarmBroasCastReceiver::class.java).apply {
+                putExtra(EXTRA_TITLE, noteTitle.text.toString())
+                putExtra(EXTRA_TITLE, noteContent.text.toString())
+            }
+
         }
     }
 
