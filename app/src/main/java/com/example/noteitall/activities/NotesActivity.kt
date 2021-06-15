@@ -22,10 +22,13 @@ import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.AlarmBroasCastReceiver
 import com.example.noteitall.utility.CoRoutineUtilityClass
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import java.net.URI
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -106,18 +109,6 @@ class NotesActivity() : CoRoutineUtilityClass() {
                     viewModel.UpdateNoteOnEdit(note)
                 }
                 viewModel.insertNewNote(note)
-//                replyIntent.putExtra(EXTRA_NOTE_ID,note.id)
-//                    viewModel.insertNewNote(note)
-
-//                replyIntent.putExtra(EXTRA_TITLE,note.titleOFNote)
-//                replyIntent.putExtra(EXTRA_CONTENT,note.contentOFNote)
-
-//                val id:Int=intent.getIntExtra(EXTRA_NOTE_ID,-1)
-//                if (id!=-1){
-//                    replyIntent.putExtra(EXTRA_NOTE_ID,id)
-//                    viewModel.UpdateNoteOnEdit(note)
-//                }
-//                setResult(RESULT_OK, replyIntent)
                 finish()
             }
 
@@ -211,6 +202,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
     }
 
     fun ShowTimePicker() {
+
         timePicker=MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(12).setMinute(0).setTitleText("Select Time").build()
