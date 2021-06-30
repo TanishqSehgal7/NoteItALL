@@ -16,31 +16,28 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.noteitall.R
+import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.activities.MainActivity
 import com.example.noteitall.activities.NotesActivity
 import com.example.noteitall.entities.Note
 
 class AlarmBroasCastReceiver : BroadcastReceiver(){
 
+
+
     override fun onReceive(context: Context?, intent: Intent?) {
 
-//        val note:Note
-//            val titleOfNote = intent?.getStringExtra(NotesActivity.EXTRA_TITLE).toString()
-//            val contentOfNote = intent?.getStringExtra(NotesActivity.EXTRA_CONTENT)?.trim().toString()
-//
-//        note = Note(titleOfNote, contentOfNote)
 
-            val intent = Intent(context, MainActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.putExtra("Check Task", true)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-
+            val intentTarget = Intent(context, NotesActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intentTarget, 0)
             val notificationBuilder = context?.let { NotificationCompat.Builder(it, "alarmNotificationForNote") }
+            val notificationTitle=intentTarget.getStringExtra("notificationTitle")
+            val notificationText=intentTarget.getStringExtra("notificationContent")
+            val note=Note(notificationTitle.toString(),notificationText.toString())
 
         notificationBuilder?.setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
-            ?.setContentText(intent?.getStringExtra(NotesActivity.EXTRA_TITLE.toString()))
-            ?.setContentTitle("Reminder!!")
+            ?.setContentTitle(note.titleOFNote)
+            ?.setContentText("Click to check note")
             ?.addAction(R.drawable.ic_baseline_open_in_new_24,"Check Note",pendingIntent)
             ?.setAutoCancel(true)
             ?.setVisibility(VISIBILITY_PUBLIC)

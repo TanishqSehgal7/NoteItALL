@@ -175,9 +175,7 @@ class NotesActivity() : CoRoutineUtilityClass() {
             note.TimeandDate = currentTimeandDate
             viewModel.insertNewNote(note)
 
-            if (note!=null){
-                viewModel.UpdateNoteOnEdit(note)
-            }
+            viewModel.UpdateNoteOnEdit(note)
 
             val data=Intent()
             data.putExtra(EXTRA_TITLE,noteTitleText)
@@ -218,10 +216,9 @@ class NotesActivity() : CoRoutineUtilityClass() {
             SetAlarm()
 
             val broadcastIntent = Intent(application, AlarmBroasCastReceiver::class.java).apply {
-                putExtra(EXTRA_TITLE, noteTitle.text.toString())
-                putExtra(EXTRA_TITLE, noteContent.text.toString())
+                putExtra("notificationTitle", noteTitle.text.toString())
+                putExtra("notificationContent", noteContent.text.toString())
             }
-
         }
     }
 

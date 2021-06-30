@@ -17,12 +17,12 @@ interface NoteDao {
     suspend fun insetNewNote(note: Note)
 
     @Update
-    suspend fun updateExistingNote(note: Note)
+    suspend fun updateExistingNote(vararg note: Note)
 
     @Delete
     suspend fun deleteNote(note: Note)
 
     @Query("SELECT * FROM Notes WHERE titleOFNote LIKE :searchQuery OR contentOFNote LIKE :searchQuery")
-fun SearchNoteDatabase(searchQuery: String) : LiveData<List<Note>>
+    fun SearchNoteDatabase(searchQuery: String) : LiveData<List<Note>>
 
 }

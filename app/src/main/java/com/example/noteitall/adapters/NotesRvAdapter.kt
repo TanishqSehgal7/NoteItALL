@@ -49,14 +49,6 @@ private val deleteNoteOnLongClickListener: DeleteNoteOnLongClickListener) : Recy
         holder.itemView.setOnClickListener {
             noteItemClickListener.OnNoteClickListener(currentNote)
         }
-
-//        holder.itemView.setOnLongClickListener {
-//                deleteNoteOnLongClickListener.DeleteNoteOnLongClick(currentNote)
-//            holder.itemView.setBackgroundResource(R.drawable.bg_ondelete)
-//            true
-//        }
-
-//        holder.itemView.setBackgroundResource(R.drawable.note_card_bg)
     }
 
     fun UpdateListAfterAnyChanges(updatedList : List<Note>){

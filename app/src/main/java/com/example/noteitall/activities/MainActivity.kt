@@ -153,8 +153,8 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
             if (id==-1){
                 Toast.makeText(this, "Cannot Update Note", Toast.LENGTH_SHORT).show()
             }
-            val title: String = data?.getStringExtra(NotesActivity.EXTRA_TITLE).toString()
-            val content:String= data?.getStringExtra(NotesActivity.EXTRA_CONTENT).toString()
+            val title: String = data.getStringExtra(NotesActivity.EXTRA_TITLE).toString()
+            val content:String= data.getStringExtra(NotesActivity.EXTRA_CONTENT).toString()
             note=Note(title, content)
             viewModel.UpdateNoteOnEdit(note)
         }
@@ -163,6 +163,8 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query!=null){
             SearchNote(query)
+            SearchNote(query.substring(1))
+            SearchNote(query.subSequence(0,10).toString())
         }
         return true
     }
@@ -174,13 +176,12 @@ class MainActivity : CoRoutineUtilityClass(), NotesRvAdapter.NoteItemClickListen
         return true
     }
 
-    private fun SearchNote(query: String?){
-        val searchNote="$query%"
-        viewModel.SearchNoteDatabase(searchNote).observe(this,{list->
-            list.let {
-                adapter.UpdateListAfterAnyChanges(it)
-            }
-        })
+    private fun SearchNote(query: String?) {
+        val searchNote = "$query%"
+            viewModel.SearchNoteDatabase(searchNote).observe(this, { list ->
+                list.let {
+                    adapter.UpdateListAfterAnyChanges(it)
+                }
+            })
     }
-
 }
