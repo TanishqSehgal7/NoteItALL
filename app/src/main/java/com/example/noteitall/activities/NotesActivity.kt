@@ -3,32 +3,22 @@ package com.example.noteitall.activities
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.noteitall.DataBase.NotesDataBase
 import com.example.noteitall.R
 import com.example.noteitall.ViewModel.NoteViewModelClass
 import com.example.noteitall.entities.Note
 import com.example.noteitall.utility.AlarmBroasCastReceiver
 import com.example.noteitall.utility.CoRoutineUtilityClass
-import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
-import java.net.URI
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -153,7 +143,12 @@ class NotesActivity() : CoRoutineUtilityClass() {
         SetNotificationForNote = findViewById(R.id.SetReminder)
         SetNotificationForNote.setOnClickListener {
             ShowTimePicker()
+
+            SaveNoteButton.setOnClickListener {
+                SetAlarm()
+            }
         }
+
     }
 
     override fun onBackPressed() {
@@ -182,6 +177,36 @@ class NotesActivity() : CoRoutineUtilityClass() {
             data.putExtra(EXTRA_CONTENT,noteContentText)
         }
         super.onBackPressed()
+    }
+
+    // in case app crashes while writing a note or while editing
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if (noteTitle.text.toString().trim().isEmpty() or noteContent.text.toString().trim().isEmpty()) {
+            finish()
+
+        } else {
+            noteTitleText = noteTitle.text.toString()
+            noteContentText = noteContent.text.toString()
+            viewModel = ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            )
+                .get(NoteViewModelClass::class.java)
+            viewModel.allNotesLiveData.observe(this, { list ->
+
+            })
+            note = Note(noteTitleText, noteContentText)
+            note.TimeandDate = currentTimeandDate
+            viewModel.insertNewNote(note)
+
+            viewModel.UpdateNoteOnEdit(note)
+
+            val data=Intent()
+            data.putExtra(EXTRA_TITLE,noteTitleText)
+            data.putExtra(EXTRA_CONTENT,noteContentText)
+        }
     }
 
     fun CreateNotificationChannelForAlarm() {
@@ -213,19 +238,18 @@ class NotesActivity() : CoRoutineUtilityClass() {
             calendar.set(Calendar.MINUTE,timePicker.minute)
             calendar.set(Calendar.SECOND,0)
             calendar.set(Calendar.MILLISECOND,0)
-            SetAlarm()
-
             val broadcastIntent = Intent(application, AlarmBroasCastReceiver::class.java).apply {
                 putExtra("notificationTitle", noteTitle.text.toString())
                 putExtra("notificationContent", noteContent.text.toString())
             }
+            sendBroadcast(broadcastIntent)
         }
     }
 
     fun SetAlarm() {
         alarmManager=getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent=Intent(this,AlarmBroasCastReceiver::class.java)
-        pendingIntent= PendingIntent.getBroadcast(this, 0, intent, 0)
+        pendingIntent= PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
         Toast.makeText(this,"Alarm Set Successfully",Toast.LENGTH_SHORT).show()
     }

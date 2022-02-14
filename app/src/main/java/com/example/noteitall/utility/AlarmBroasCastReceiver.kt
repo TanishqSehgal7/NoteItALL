@@ -1,23 +1,15 @@
 package com.example.noteitall.utility
 
-import android.app.Notification
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.media.Ringtone
 import android.media.RingtoneManager
-import android.opengl.Visibility
-import android.os.Bundle
-import android.provider.ContactsContract
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.noteitall.R
-import com.example.noteitall.ViewModel.NoteViewModelClass
-import com.example.noteitall.activities.MainActivity
 import com.example.noteitall.activities.NotesActivity
 import com.example.noteitall.entities.Note
 
@@ -29,7 +21,7 @@ class AlarmBroasCastReceiver : BroadcastReceiver(){
 
 
             val intentTarget = Intent(context, NotesActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intentTarget, 0)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intentTarget, PendingIntent.FLAG_UPDATE_CURRENT)
             val notificationBuilder = context?.let { NotificationCompat.Builder(it, "alarmNotificationForNote") }
             val notificationTitle=intentTarget.getStringExtra("notificationTitle")
             val notificationText=intentTarget.getStringExtra("notificationContent")
